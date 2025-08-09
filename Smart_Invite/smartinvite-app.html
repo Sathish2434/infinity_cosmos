@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartInvite.AI - Event Invitation Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h1>🎉 SmartInvite.AI</h1>
+            
+            <form id="inviteForm" action="storedata.php" method="POST">
+                <div class="form-group">
+                    <label for="eventType">🎭 Event Type</label>
+                    <select id="eventType" name="eventType">
+                        <option value="">Select Event Type</option>
+                        <option value="birthday">🎂 Birthday Party</option>
+                        <option value="wedding">💒 Wedding</option>
+                        <option value="baby-shower">🍼 Baby Shower</option>
+                        <option value="graduation">🎓 Graduation</option>
+                        <option value="anniversary">💕 Anniversary</option>
+                        <option value="housewarming">🏠 Housewarming</option>
+                        <option value="corporate">🏢 Corporate Event</option>
+                        <option value="holiday">🎄 Holiday Party</option>
+                        <option value="retirement">🎉 Retirement</option>
+                        <option value="engagement">💍 Engagement</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventTitle">📝 Event Title</label>
+                    <input type="text" id="eventTitle" name="eventTitle" placeholder="Enter event title">
+                </div>
+
+                <!-- Dynamic Fields for Birthday -->
+                <div id="birthdayFields" class="dynamic-fields">
+                    <div class="form-group">
+                        <label for="birthdayAge">🎂 Age</label>
+                        <input type="number" id="birthdayAge" name="birthdayAge" placeholder="Age turning">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthdayName">👤 Birthday Person</label>
+                        <input type="text" id="birthdayName" name="birthdayName" placeholder="Name of birthday person">
+                    </div>
+                </div>
+
+                <!-- Dynamic Fields for Wedding -->
+                <div id="weddingFields" class="dynamic-fields">
+                    <div class="form-group">
+                        <label for="brideName">👰 Bride's Name</label>
+                        <input type="text" id="brideName" name="brideName" placeholder="Bride's name">
+                    </div>
+                    <div class="form-group">
+                        <label for="groomName">🤵 Groom's Name</label>
+                        <input type="text" id="groomName" name="groomName" placeholder="Groom's name">
+                    </div>
+                </div>
+
+                <!-- Dynamic Fields for Corporate -->
+                <div id="corporateFields" class="dynamic-fields">
+                    <div class="form-group">
+                        <label for="companyName">🏢 Company Name</label>
+                        <input type="text" id="companyName" name="companyName" placeholder="Company name">
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingType">📊 Meeting Type</label>
+                        <select id="meetingType" name="meetingType">
+                            <option value="">Conference</option>
+                            <option value="team-meeting">Team Meeting</option>
+                            <option value="seminar">Seminar</option>
+                            <option value="workshop">Workshop</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDate">📅 Event Date</label>
+                    <input type="date" id="eventDate" name="eventDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="eventTime">⏰ Event Time</label>
+                    <input type="time" id="eventTime" name="eventTime">
+                </div>
+
+                <div class="form-group">
+                    <label for="eventLocation">📍 Location</label>
+                    <input type="text" id="eventLocation" name="eventLocation" placeholder="Event location">
+                </div>
+
+                <div class="form-group">
+                    <label for="hostName">👥 Host Name</label>
+                    <input type="text" id="hostName" name="hostName" placeholder="Your name">
+                </div>
+
+                <div class="form-group">
+                    <label for="eventMessage">💬 Custom Message</label>
+                    <textarea id="eventMessage" name="eventMessage" placeholder="Add a personal message..."></textarea>
+                </div>
+
+                <!-- AI Suggestions -->
+                <div id="aiSuggestions" class="ai-suggestions" style="display: none;">
+                    <h3>🤖 AI Suggestions</h3>
+                    <div id="suggestionsList"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>🎨 Choose Theme</label>
+                    <div class="theme-selector">
+                        <div class="theme-option theme-elegant" data-theme="elegant">Elegant</div>
+                        <div class="theme-option theme-romantic" data-theme="romantic">Romantic</div>
+                        <div class="theme-option theme-modern active" data-theme="modern">Modern</div>
+                        <div class="theme-option theme-festive" data-theme="festive">Festive</div>
+                        <div class="theme-option theme-corporate" data-theme="corporate">Corporate</div>
+                        <div class="theme-option theme-nature" data-theme="nature">Nature</div>
+                        <div class="theme-option theme-neon" data-theme="neon">Neon</div>
+                        <div class="theme-option theme-vintage" data-theme="vintage">Vintage</div>
+                        <div class="theme-option theme-minimal" data-theme="minimal" style="color: black; border: 1px solid;">Minimal</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn-primary" onclick="generateInvite()">📥 Generate</button>
+                    <button type="button" class="btn-secondary" onclick="emailInvite()">📧 Email</button>
+                </div>
+
+                <div class="success-message" id="successMessage">
+                    ✅ Invitation processed successfully!
+                </div>
+            </form>
+        </div>
+
+        <div class="preview-section">
+            <h2>👁️ Live Preview</h2>
+            <div id="previewCard" class="preview-card theme-modern">
+                <div class="preview-content">
+                    <div class="event-title" id="previewTitle">Your Event Title</div>
+                    <div class="event-details" id="previewDetails">
+                        <div>📅 <span id="previewDate">Select a date</span></div>
+                        <div>⏰ <span id="previewTime">Select a time</span></div>
+                        <div>📍 <span id="previewLocation">Enter location</span></div>
+                        <div>👥 Hosted by <span id="previewHost">Host name</span></div>
+                    </div>
+                    <div class="event-message" id="previewMessage">Your personal message will appear here...</div>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processing your invitation...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script_updated_generate.js"></script>
+    <script src="emailInvite.js"></script>
+</body>
+</html>
